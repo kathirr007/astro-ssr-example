@@ -1,14 +1,17 @@
 ---
+import AllProducts from "./_all-products.vue";
+import ProductDetails from "./_product-details.vue";
+
 const { path = "index" } = Astro.params;
 
 const page = [
   {
-    match: /some-regex/,
+    match: /all/,
     title: "View all products",
   },
   {
-    match: /some-regex/,
-    title: "Some Product",
+    match: /\w+/,
+    title: "Product Details",
   },
   {
     match: /some-regex/,
@@ -22,9 +25,18 @@ const page = [
 
 const relevantPageDetails = page.find((v) => path.match(v.match));
 
+console.log(Astro.params)
+
 if (!relevantPageDetails) {
   return Astro.redirect("/404");
 }
 ---
 
 <h1>{relevantPageDetails.title}</h1>
+{
+  relevantPageDetails.title === 'View all products' && <AllProducts client:only="vue" />  
+}
+
+{
+  relevantPageDetails.title === 'Product Details' && <ProductDetails productId={path} client:visible />  
+}
