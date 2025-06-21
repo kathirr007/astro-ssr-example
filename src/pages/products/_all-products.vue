@@ -12,7 +12,6 @@ onMounted(async () => {
 </script>
 
 <template>
-    All Products list
     <div v-for="item in allProducts" :key="item.id">
         <a :href="`/products/${item.id}`">
             {{ item.title }}

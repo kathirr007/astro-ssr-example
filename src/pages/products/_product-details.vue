@@ -14,22 +14,33 @@ onMounted(async () => {
 
 </script>
 
-<template v-if="productDetails">
+<template>
 
-    <h2>
-        {{ productDetails?.title }}
-    </h2>
-    <p>
-        {{ productDetails?.description }}
-    </p>
-    <p>
-        Price: ${{ productDetails?.price }}
-    </p>
-    <div>
-        <template v-for="(item, index) in productDetails?.images" :key="index">
-            <img class="product-image" :src="item" :alt="`Product Image - ${index + 1}`">
+
+    <Suspense>
+        <div>
+            <!-- component with nested async dependencies -->
+            <h2>
+                {{ productDetails?.title }}
+            </h2>
+            <p>
+                {{ productDetails?.description }}
+            </p>
+            <p>
+                Price: ${{ productDetails?.price }}
+            </p>
+            <div>
+                <template v-for="(item, index) in productDetails?.images" :key="index">
+                    <img class="product-image" :src="item" :alt="`Product Image - ${index + 1}`">
+                </template>
+            </div>
+        </div>
+
+        <!-- loading state via #fallback slot -->
+        <template #fallback>
+            Loading...
         </template>
-    </div>
+    </Suspense>
 </template>
 
 <style scoped>
