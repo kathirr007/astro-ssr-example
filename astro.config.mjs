@@ -8,5 +8,8 @@ import vue from "@astrojs/vue";
 export default defineConfig({
   output: "server",
   adapter: netlify(),
-  integrations: [vue({ devtools: true })],
+  integrations: [vue({ 
+    appEntrypoint: '/src/_vue-app',
+    devtools: true,
+   })],
 });

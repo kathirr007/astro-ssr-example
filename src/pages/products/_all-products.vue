@@ -1,22 +1,26 @@
 <script setup lang="ts">
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
-const allProducts = ref<any[]>([])
+import { useProducts } from '../../composables/products'
+import { useQuery } from '@tanstack/vue-query'
 
-onMounted(async () => {
-    const products = await axios.get('https://dummyjson.com/products')
-    allProducts.value = products.data.products
-}
-)
+const { getAll } = useProducts()
+
+const { isPending, isError, data, error } = useQuery({
+    queryKey: ['todos'],
+    queryFn: getAll,
+})
 
 </script>
 
 <template>
-    <div v-for="item in allProducts" :key="item.id">
-        <a :href="`/products/${item.id}`">
-            {{ item.title }}
-        </a>
-    </div>
+    <div v-if="isPending">Loading...</div>
+    <div v-else-if="isError">An error has occurred: {{ error }}</div>
+    <template v-else>
+        <div v-for="item in (data as any).products" :key="item.id">
+            <a :href="`/products/${item.id}`">
+                {{ item.title }}
+            </a>
+        </div>
+    </template>
 </template>
 
 <style scoped></style>
